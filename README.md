@@ -7,4 +7,4 @@ This is a plugin for searching and downloading lyrics for the playing song.
     $ cd ~/.local/share/totem/plugins/
     $ git clone https://github.com/asankarc/Totem-Lyrics-Extension.git
 
-Then enable the plugin in Totem plyer (Edit -> Plugins...)
+Then enable the plugin in Totem Movie player (Edit -> Plugins...)
