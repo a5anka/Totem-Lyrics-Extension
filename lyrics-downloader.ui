@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkListStore" id="lyrics_model">
+    <columns>
+      <!-- column-name Song -->
+      <column type="gchararray"/>
+      <!-- column-name Artist -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Thriller 
+Ke$ha</col>
+        <col id="1" translatable="yes">MJ
+Kesha</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">gosj</col>
+        <col id="1" translatable="yes">dfd</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkWindow" id="lyrics_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
@@ -19,11 +39,34 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Song not detected</property>
+            <property name="justify">fill</property>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
+            <property name="fill">False</property>
             <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow1">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="shadow_type">etched-out</property>
+            <child>
+              <object class="GtkTreeView" id="lyrics_treeview">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="model">lyrics_model</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="treeview-selection3"/>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -76,7 +119,7 @@
             <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="pack_type">end</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>

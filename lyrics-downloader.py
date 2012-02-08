@@ -3,6 +3,8 @@
 from gi.repository import GObject, Peas, GdkPixbuf, Gtk, Notify # pylint: disable-msg=E0611
 from gi.repository import Totem, Gio # pylint: disable-msg=E0611
 
+from  tag_identifier import identify_mp3
+
 class LyricsPlugin (GObject.Object, Peas.Activatable):
     __gtype_name__ = 'LyricsPlugin'
 
@@ -109,7 +111,29 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
                                                self)
         self._dialog = builder.get_object ('lyrics_dialog')
         self._close_button = builder.get_object ('close_button')
+        self._apply_button = builder.get_object ('apply_button')
         self._info_label = builder.get_object ('info_label')
+        self._tree_view = builder.get_object ('lyrics_treeview')
+        self._list_store = builder.get_object ('lyrics_model')
+
+        self._apply_button.set_sensitive (False)
+
+        # Set up the results treeview
+        renderer = Gtk.CellRendererText ()
+        self._tree_view.set_model (self._list_store)
+        column = Gtk.TreeViewColumn ("Song", renderer, text=0)
+        column.set_resizable (True)
+        column.set_expand (True)
+        self._tree_view.append_column (column)
+        column = Gtk.TreeViewColumn ("Artist", renderer, text=1)
+        self._tree_view.append_column (column)
+
+
+        #Some sample data
+        self._list_store.clear()
+        self._list_store.append(['Thriller','MJ'])
+        self._list_store.append(['Beat it','MJ'])
+        self._list_store.append(['Billie Jean','MJ'])
         
         # Set up signals
         self._close_button.connect ('clicked', self.__on_close_clicked)
@@ -121,7 +145,7 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         if not self._dialog:
             self._build_dialog()
 
-        self._info_label.set_text("This is manually set")
+        self._info_label.set_text(self._get_song_info())
 
         self._dialog.show_all()
         
@@ -135,6 +159,15 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         n.set_timeout(1000)
         
         n.show()
+
+    def _get_song_info(self, ):
+        """
+        Return a string about the current played mp3
+
+        """
+        artist, title = identify_mp3(self._totem.get_current_mrl ())
+        return title + ' by ' + artist
+        
 
     def _get_file_path(self, filename):
         """
