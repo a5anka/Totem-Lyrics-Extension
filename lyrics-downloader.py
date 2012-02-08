@@ -1,6 +1,7 @@
 # _*_ coding: utf-8 _*_
 
 from gi.repository import GObject, Peas, GdkPixbuf, Gtk, Notify # pylint: disable-msg=E0611
+from gi.repository import Totem # pylint: disable-msg=E0611
 
 class LyricsPlugin (GObject.Object, Peas.Activatable):
     __gtype_name__ = 'LyricsPlugin'
@@ -82,10 +83,20 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         Notify.init("Totem Lyrics Plugin")
         
         n = Notify.Notification(summary=title,	body=description)
-        plugin_path = ".local/share/totem/plugins/lyrics-downloader/"
-        icon = GdkPixbuf.Pixbuf.new_from_file(plugin_path + "icon.png")
+        icon = GdkPixbuf.Pixbuf.new_from_file(self._get_file_path("icon.png"))
         n.set_icon_from_pixbuf(icon)
         
         n.set_timeout(1000)
         
         n.show()
+
+    def _get_file_path(self, filename):
+        """
+        This method returns the a absolute path for the file.
+        This should be used by plugins to find plugin-specific resource files.
+    
+        Arguments:
+        - `filename`: filename of the resource file
+        """
+        return Totem.plugin_find_file("lyrics-downloader",filename)
+        
