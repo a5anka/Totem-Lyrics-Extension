@@ -166,6 +166,10 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
 
         """
         artist, title = identify_mp3(self._totem.get_current_mrl ())
+
+        if artist == None or title == None:
+            return "Could not identify the song file :("
+        
         return title + ' by ' + artist
         
 

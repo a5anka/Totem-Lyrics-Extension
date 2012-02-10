@@ -15,5 +15,12 @@ def identify_mp3(filename):
 
     song_tags = EasyID3(file_path)
 
-    return song_tags['artist'][0], song_tags['title'][0]
+    artist, title = None, None
+    
+    if 'artist' in song_tags:
+        artist = song_tags['artist'][0]
+    if 'title' in song_tags:
+        title = song_tags['title'][0]
+    
+    return artist , title
     
