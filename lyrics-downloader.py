@@ -13,10 +13,10 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
     def __init__ (self):
         GObject.Object.__init__ (self)
 
-        self._dialog = None
-        self._totem = None
+        self._dialog = None # Reference to the dialog box
+        self._totem = None # Reference to the player
         
-        self._manager = None
+        self._manager = None # UI manager of the player
         self._menu_id = None
         self._action_group = None
         self._action = None
@@ -35,20 +35,27 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         self._totem = self.object
 
         self._manager = self._totem.get_ui_manager ()
-        self._append_menu()
+        self._append_menu() # Adds a menu item to the view menu
 
         self._totem.connect ('file-opened', self.__on_totem__file_opened)
         self._totem.connect ('file-closed', self.__on_totem__file_closed)
 
     def do_deactivate (self):
-        # Include the Plugin destroying Actions
+        """
+        Include the Plugin destroying Actions
+
+        """
         if self._dialog:
             self._dialog.destroy()
         self._totem = None
 
-        self._delete_menu()
+        self._delete_menu() # get rid of the created menu item
 
     def _append_menu (self):
+        """
+        Adds a menu item to the view menu
+
+        """
         self._action_group = Gtk.ActionGroup (name='LyricsPlugin')
 
         tooltip_text = "Search lyrics for the current song"
@@ -62,14 +69,14 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         self._manager.insert_action_group (self._action_group, 0)
 
         self._menu_id = self._manager.new_merge_id ()
-        print (self._menu_id)
-        merge_path = '/tmw-menubar/view'
-        self._manager.add_ui (self._menu_id,
-                              merge_path,
-                              'lyricsplugin',
-                              'lyricsplugin',
+
+        merge_path = '/tmw-menubar/view' # location where the menu item inserted
+        self._manager.add_ui (self._menu_id,       # merge id 
+                              merge_path,          # merg path
+                              'lyricsplugin',      # name of the ui
+                              'lyricsplugin',      # name of the action
                               Gtk.UIManagerItemType.MENUITEM,
-                              False)
+                              False)  # Top
         self._action.set_visible (True)
         
         self._manager.ensure_update ()
@@ -103,6 +110,7 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
     def _build_dialog(self, ):
         """
         Builds the main gui of the lyrics plugin
+        Uses the lyrics-downloader.ui file to build the GUI
         
         """
         builder = Totem.plugin_load_interface ("lyrics-downloader",
@@ -150,6 +158,10 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         self._dialog.show_all()
         
     def _show_notification (self,title,description):
+        """
+        This method can be used to send notifications to desktop
+
+        """
         Notify.init("Totem Lyrics Plugin")
         
         n = Notify.Notification(summary=title,	body=description)
