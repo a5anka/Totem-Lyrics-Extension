@@ -60,7 +60,7 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
 
         tooltip_text = "Search lyrics for the current song"
         self._action = Gtk.Action (name='lyricsplugin',
-                                   label='Download Lyrics',
+                                   label='Get Lyrics',
                                    tooltip=tooltip_text,
                                    stock_id=None)
 
@@ -142,6 +142,7 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         self._list_store.append(['Thriller','MJ'])
         self._list_store.append(['Beat it','MJ'])
         self._list_store.append(['Billie Jean','MJ'])
+        self._list_store.append(['The Lazy song','Bruno Mars'])
         
         # Set up signals
         self._close_button.connect ('clicked', self.__on_close_clicked)
@@ -153,7 +154,7 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         if not self._dialog:
             self._build_dialog()
 
-        self._info_label.set_text(self._get_song_info())
+        self._info_label.set_text('Results for ' + self._get_song_info())
 
         self._dialog.show_all()
         
