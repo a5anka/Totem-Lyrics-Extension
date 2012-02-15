@@ -45,12 +45,15 @@ class ChartLyricsModel(object):
         - `lyrics_checksum`:
         - `lyrics_id`:
         """
-        if lyric_id == '0' or lyrics_checksum == '0':
+        if lyrics_id == '0' or lyrics_checksum == '0':
             return None
         
         url = DOWNLOAD_URL % (lyrics_id,lyrics_checksum)
-        req = urllib2.urlopen(url)
-        result = req.read()
+        try:
+            req = urllib2.urlopen(url)
+            result = req.read()
+        except:
+            return None
         
         lyric = ElementTree.fromstring(result)
         
