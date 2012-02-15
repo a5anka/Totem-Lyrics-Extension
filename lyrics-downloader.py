@@ -172,7 +172,7 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         
         n.show()
 
-    def _get_song_info(self, ):
+    def _get_song_info(self):
         """
         Return a string about the current played mp3
 
