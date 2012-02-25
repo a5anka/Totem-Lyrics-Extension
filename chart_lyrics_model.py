@@ -45,7 +45,7 @@ class ChartLyricsModel(object):
         
         return result_array, message
 
-    def download_lyrics(self, lyrics_checksum, lyrics_id):
+    def download_lyrics(self, lyrics_id, lyrics_checksum):
         """
         Download the selected lyrics from chart lyrics
         
@@ -65,7 +65,7 @@ class ChartLyricsModel(object):
             result = req.read()
         except:
             self._lock.release ()
-            return (None , "Could not contact the server.")
+            return (None , "Could not contact the server. Try again...")
         
         lyric = ElementTree.fromstring(result)
 

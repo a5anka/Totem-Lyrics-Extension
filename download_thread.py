@@ -16,7 +16,7 @@ class DownloadThread (threading.Thread):
         self._lock.acquire (True)
         (self._lyrics,
          self._message) = self._model.download_lyrics (self._lyric_id,
-                                                       self,_checksum)
+                                                       self._checksum)
         self._done = True
         self._lock.release ()
 
@@ -28,10 +28,10 @@ class DownloadThread (threading.Thread):
             lyrics = self._lyrics
         self._lock.release ()
 
-        return Lyrics
+        return lyrics
 
     def get_message (self):
-        message = _(u'Downloading the lyrics…')
+        message = _(u'Downloading the lyrics...')
 
         self._lock.acquire (True)
         if self._done:
