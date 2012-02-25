@@ -10,7 +10,7 @@ class SearchThread (threading.Thread):
     self._done = False
 
     self._lock =  threading.Lock()
-    self._results = None
+    self._results = []
     self._message = ''
     threading.Thread.__init__(self)
     
@@ -34,7 +34,7 @@ class SearchThread (threading.Thread):
     return results
 
   def get_message (self):
-    message = _(u'Searching for subtitles…')
+    message = ('Searching for lyrics...')
     
     self._lock.acquire (True)
     if self._done:

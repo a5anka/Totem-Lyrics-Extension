@@ -34,9 +34,12 @@ class ChartLyricsModel(object):
 
         result_array = []
         
-        for each in actual_results:
-            data = self._parse_result(each)
-            result_array.append(data)
+        if len(actual_results) == 0:
+            message = 'No results found'
+        else:
+            for each in actual_results:
+                data = self._parse_result(each)
+                result_array.append(data)
 
         self._lock.release ()
         
