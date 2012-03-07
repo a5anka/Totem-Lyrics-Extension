@@ -12,22 +12,6 @@
       <!-- column-name Checksum -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Thriller 
-Ke$ha</col>
-        <col id="1" translatable="yes">MJ
-Kesha</col>
-        <col id="2" translatable="yes"/>
-        <col id="3" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes">gosj</col>
-        <col id="1" translatable="yes">dfd</col>
-        <col id="2" translatable="yes"/>
-        <col id="3" translatable="yes"/>
-      </row>
-    </data>
   </object>
   <object class="GtkWindow" id="lyrics_dialog">
     <property name="can_focus">False</property>
