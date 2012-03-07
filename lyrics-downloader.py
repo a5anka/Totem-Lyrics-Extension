@@ -7,6 +7,7 @@ from tag_identifier import identify_mp3
 from chart_lyrics_model import ChartLyricsModel
 from search_thread import SearchThread
 from download_thread import DownloadThread
+from sidebar import LyricsSidebar
 
 class LyricsPlugin (GObject.Object, Peas.Activatable):
     __gtype_name__ = 'LyricsPlugin'
@@ -30,6 +31,8 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         self._info_label = None
 
         self._model = None
+
+        self._sidebar = None
         
     # totem.Plugin methods
 
@@ -57,6 +60,9 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         """
         if self._dialog:
             self._dialog.destroy()
+
+        if self._sidebar:
+            self._sidebar.destroy()
         self._totem = None
 
         self._delete_menu() # get rid of the created menu item
@@ -289,11 +295,22 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         lyrics = download_thread.get_lyrics ()
 
         if lyrics:
-            print lyrics
+            self._show_sidebar(lyrics)
             self._close_dialog ()
         else:
             self._apply_button.set_sensitive(True)
         return False
+
+    def _show_sidebar(self, lyrics):
+        """
+    
+        Arguments:
+        - `lyrics`:
+        """
+        if not self._sidebar:
+            self._sidebar = LyricsSidebar(self._totem)
+
+        self._sidebar.set_lyrics(lyrics)
         
 
     def _progress_bar_update(self, thread):
