@@ -5,6 +5,7 @@ from gi.repository import Totem, Gio # pylint: disable-msg=E0611
 
 from tag_identifier import identify_mp3
 from chart_lyrics_model import ChartLyricsModel
+from lyrdb_model import LyrdbModel
 from search_thread import SearchThread
 from download_thread import DownloadThread
 from sidebar import LyricsSidebar
@@ -27,7 +28,6 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
 
         self._close_button = None
         self._apply_button = None
-        self._refresh_button = None
         self._info_label = None
 
         self._model = None
@@ -136,14 +136,29 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         self._dialog = builder.get_object ('lyrics_dialog')
         self._close_button = builder.get_object ('close_button')
         self._apply_button = builder.get_object ('apply_button')
-        self._refresh_button = builder.get_object ('refresh_button')
-        self._info_label = builder.get_object ('info_label')
+        self._find_button = builder.get_object ('find_button')
         self._tree_view = builder.get_object ('lyrics_treeview')
         self._list_store = builder.get_object ('lyrics_model')
         self._progress = builder.get_object ('progress_bar')
+        combobox = builder.get_object('server_combobox')
+        servers = builder.get_object('server_model')
 
         self._apply_button.set_sensitive (False)
 
+        # Setup the combobox
+        renderer = Gtk.CellRendererText ()
+        sorted_servers = Gtk.TreeModelSort (model = servers)
+        sorted_servers.set_sort_column_id (0, Gtk.SortType.ASCENDING)
+        combobox.set_model (sorted_servers)
+        combobox.pack_start (renderer, True)
+        combobox.add_attribute (renderer, 'text', 0)
+
+        itera = servers.append(["Chart Lyrics","1"])
+        servers.append(["Lyrdb","2"])
+        success, parentit = sorted_servers.convert_child_iter_to_iter(itera)
+        combobox.set_active_iter(parentit)
+        
+        
         # Set up the results treeview
         renderer = Gtk.CellRendererText ()
         self._tree_view.set_model (self._list_store)
@@ -159,12 +174,13 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
 
         
         # Set up signals
+        combobox.connect ('changed', self.__on_combobox__changed)
         self._close_button.connect ('clicked', self.__on_close_clicked)
         
         self._dialog.connect ('delete-event', self._dialog.hide_on_delete)
         self._dialog.set_transient_for (self._totem.get_main_window ())
         self._apply_button.connect ('clicked', self.__on_apply_clicked)
-        self._refresh_button.connect('clicked', self.__on_refresh_clicked)
+        self._find_button.connect ('clicked', self.__on_find_clicked)
 
         # connect callbacks
         self._tree_view.get_selection ().connect ('changed',
@@ -174,8 +190,9 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         if not self._dialog:
             self._build_dialog()
 
+        self._progress.set_text("")
         self._dialog.show_all()
-        self._initiate_find()
+        
 
         
     def _show_notification (self,title,description):
@@ -202,10 +219,8 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         artist, title = identify_mp3(self._totem.get_current_mrl ())
 
         if artist == None or title == None:
-            self._info_label.set_text("Could not identify the song file :(")
+            self._progress.set_text("Could not identify the song file :(")
         else:
-            song_info = title + ' by ' + artist
-            self._info_label.set_text('Results for ' + song_info)
             self._get_results(artist, title)
 
 
@@ -377,10 +392,16 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
         else:
             self._apply_button.set_sensitive (False)
 
-    def __on_refresh_clicked(self, _data):
-        """
-        Click event for refresh button
-        """
+    def __on_combobox__changed (self, combobox):
+        self._list_store.clear()
+        
+        combo_iter = combobox.get_active_iter ()
+        combo_model = combobox.get_model ()
+        option = combo_model.get_value (combo_iter, 1)
+        if option == "1":
+            self._model = ChartLyricsModel()
+        elif option == "2":
+            self._model = LyrdbModel()
+
+    def __on_find_clicked (self, _data):
         self._initiate_find()
-        
-        

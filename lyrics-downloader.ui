@@ -28,25 +28,39 @@
         <property name="orientation">vertical</property>
         <property name="spacing">8</property>
         <child>
-          <object class="GtkBox" id="box2">
-            <property name="visible">True</property>
+          <object class="GtkHBox" id="hbox2">
             <property name="can_focus">False</property>
+            <property name="spacing">6</property>
             <child>
-              <object class="GtkLabel" id="info_label">
+              <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Song not detected</property>
+                <property name="label" translatable="yes">Select Server:</property>
+                <property name="use_underline">True</property>
                 <property name="justify">fill</property>
+                <property name="mnemonic_widget">server_combobox</property>
               </object>
               <packing>
-                <property name="expand">True</property>
+                <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="refresh_button">
-                <property name="label">gtk-refresh</property>
+              <object class="GtkComboBox" id="server_combobox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="model">server_model</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="find_button">
+                <property name="label">gtk-find</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -56,8 +70,8 @@
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -157,5 +171,13 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkListStore" id="server_model">
+    <columns>
+      <!-- column-name ServerName -->
+      <column type="gchararray"/>
+      <!-- column-name value -->
+      <column type="gchararray"/>
+    </columns>
   </object>
 </interface>
