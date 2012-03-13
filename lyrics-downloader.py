@@ -28,7 +28,6 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
 
         self._close_button = None
         self._apply_button = None
-        self._info_label = None
 
         self._model = None
 
