@@ -18,7 +18,6 @@ class LyrdbModel(object):
         
         """
         self._lock.acquire (True)
-        #lyric_result_key = '{http://api.chartlyrics.com/}SearchLyricResult'        
         message = ''
         try:
             url = SEARCH_URL % (urllib2.quote(track))
