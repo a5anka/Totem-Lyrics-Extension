@@ -15,13 +15,13 @@ class DialogBox (object):
 
         self._totem = totem # Reference to the player
         self._dialog = None
-        
+
         self._close_button = None
         self._apply_button = None
 
         self._model = None
         self._sidebar = sidebar
-        
+
         # Init the model
         self._model = ChartLyricsModel ()
 
@@ -37,12 +37,12 @@ class DialogBox (object):
         Dialog box is hidden instead of destroying it
         """
         self._dialog.hide()
-        
+
     def _build_dialog(self):
         """
         Builds the main gui of the lyrics plugin
         Uses the lyrics-downloader.ui file to build the GUI
-        
+
         """
         builder = Totem.plugin_load_interface ("lyrics-downloader",
                                                "lyrics-downloader.ui", True,
@@ -72,8 +72,8 @@ class DialogBox (object):
         servers.append(["Lyrdb","2"])
         success, parentit = sorted_servers.convert_child_iter_to_iter(itera)
         combobox.set_active_iter(parentit)
-        
-        
+
+
         # Set up the results treeview
         renderer = Gtk.CellRendererText ()
         self._tree_view.set_model (self._list_store)
@@ -87,22 +87,22 @@ class DialogBox (object):
         column.set_resizable (True)
         self._tree_view.append_column (column)
 
-        
+
         # Set up signals
         combobox.connect ('changed', self.__on_combobox__changed)
         self._close_button.connect ('clicked', self.__on_close_clicked)
-        
+
         self._dialog.connect ('delete-event', self._dialog.hide_on_delete)
         self._dialog.set_transient_for (self._totem.get_main_window ())
         self._apply_button.connect ('clicked', self.__on_apply_clicked)
         self._find_button.connect ('clicked', self.__on_find_clicked)
-        self._tree_view.connect ('row-activated', 
+        self._tree_view.connect ('row-activated',
                                  self.__on_treeview__row_activate)
 
         # connect callbacks
         self._tree_view.get_selection ().connect ('changed',
                                             self.__on_treeview__row_change)
-        
+
     def show_dialog (self, _action):
         if not self._dialog:
             self._build_dialog()
@@ -130,7 +130,7 @@ class DialogBox (object):
         """
         This method returns the a absolute path for the file.
         This should be used by plugin to find plugin-specific resource files.
-    
+
         Arguments:
         - `filename`: filename of the resource file
         """
@@ -140,7 +140,7 @@ class DialogBox (object):
         """
         This method retrieve data from online server
         and update the treeview
-    
+
         Arguments:
         - `artist`:
         - `title`:
@@ -156,9 +156,9 @@ class DialogBox (object):
 
     def _populate_treeview(self, search_thread):
         """
-        This method will populate the result tree 
+        This method will populate the result tree
         using the data retrieved by search thread
-    
+
         Arguments:
         - `search_thread`:
         """
@@ -192,21 +192,21 @@ class DialogBox (object):
             lyric_id = model.get_value (lyric_iter, 2)
             lyric_checksum = model.get_value (lyric_iter, 3)
 
-            download_thread = DownloadThread(self._model, 
-                                             lyric_id, 
+            download_thread = DownloadThread(self._model,
+                                             lyric_id,
                                              lyric_checksum)
             download_thread.start()
             GObject.idle_add (self._apply_lyrics, download_thread)
 
             self._progress.set_text ('Downloading the lyrics...')
-            GObject.timeout_add (350, 
-                                 self._progress_bar_update, 
+            GObject.timeout_add (350,
+                                 self._progress_bar_update,
                                  download_thread)
 
     def _apply_lyrics(self, download_thread):
         """
         This method apply the downloaded lyrics to the player
-    
+
         Arguments:
         - `download_thread`:
         """
@@ -222,7 +222,7 @@ class DialogBox (object):
             self._apply_button.set_sensitive(True)
 
         self._dialog.get_window ().set_cursor (None)
-        return False        
+        return False
 
     def _progress_bar_update(self, thread):
         """
@@ -242,7 +242,7 @@ class DialogBox (object):
 
     def _show_lyrics(self, lyrics):
         """
-    
+
         Arguments:
         - `lyrics`:
         """
@@ -251,21 +251,21 @@ class DialogBox (object):
     def __on_close_clicked(self, _data):
         """
         Clicke event of close button in the dialog box
-    
+
         Arguments:
-        - `_data`: 
+        - `_data`:
         """
         self._close_dialog()
 
     def __on_apply_clicked(self, _data):
         """
         Click event of apply button in the dialog button
-    
+
         Arguments:
         - `_data`:
         """
         self._download_and_apply ()
-        
+
     def __on_treeview__row_change (self, selection):
         if selection.count_selected_rows () == 1:
             self._apply_button.set_sensitive (True)
@@ -274,7 +274,7 @@ class DialogBox (object):
 
     def __on_treeview__row_activate(self, tree_path, column, data):
         """
-        
+
         Arguments:
         - `tree_path`:
         - `column`:
@@ -284,7 +284,7 @@ class DialogBox (object):
 
     def __on_combobox__changed (self, combobox):
         self._list_store.clear()
-        
+
         combo_iter = combobox.get_active_iter ()
         combo_model = combobox.get_model ()
         option = combo_model.get_value (combo_iter, 1)
