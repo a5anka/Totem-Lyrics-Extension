@@ -19,20 +19,20 @@ class LyricsPlugin (GObject.Object, Peas.Activatable):
     # totem.Plugin methods
 
     def do_activate (self):
-		"""
-		Called when the plugin is activated.
+        """
+        Called when the plugin is activated.
         Here the sidebar page is initialized (set up the treeview, connect
         the callbacks, ...) and added to totem.
 
-		"""
-		self._totem = self.object
-	 
-		self._sidebar = LyricsSidebar (self._totem)
+        """
+        self._totem = self.object
+
+        self._sidebar = LyricsSidebar (self._totem)
 
     def do_deactivate (self):
-		"""
-		Include the Plugin destroying Actions
+        """
+        Include the Plugin destroying Actions
 
-		"""
-		self._sidebar.destroy ()
-		self._totem = None
+        """
+        self._sidebar.destroy ()
+        self._totem = None
