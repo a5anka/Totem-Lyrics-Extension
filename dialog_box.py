@@ -1,6 +1,6 @@
 # _*_ coding: utf-8 _*_
 
-from gi.repository import GObject, Gtk # pylint: disable-msg=E0611
+from gi.repository import GObject, Gtk, Gdk # pylint: disable-msg=E0611
 from gi.repository import Totem # pylint: disable-msg=E0611
 
 from tag_identifier import identify_mp3
@@ -116,6 +116,8 @@ class DialogBox (object):
 
         """
         self._apply_button.set_sensitive (False)
+        cursor = Gdk.Cursor.new (Gdk.CursorType.WATCH)
+        self._dialog.get_window ().set_cursor (cursor)
         artist, title = identify_mp3(self._totem.get_current_mrl ())
 
         if artist == None or title == None:
@@ -171,6 +173,8 @@ class DialogBox (object):
                                               sub_data['Artist'],
                                               sub_data['LyricId'],
                                               sub_data['LyricChecksum']])
+
+        self._dialog.get_window ().set_cursor (None)
         return False
 
     def _download_and_apply(self ):
@@ -179,7 +183,9 @@ class DialogBox (object):
         """
         self._apply_button.set_sensitive (False)
         self._tree_view.set_sensitive (False)
-        
+        cursor = Gdk.Cursor.new (Gdk.CursorType.WATCH)
+        self._dialog.get_window ().set_cursor (cursor)
+
         model, rows = self._tree_view.get_selection ().get_selected_rows ()
         if rows:
             lyric_iter = model.get_iter (rows[0])
@@ -214,6 +220,8 @@ class DialogBox (object):
             self._close_dialog ()
         else:
             self._apply_button.set_sensitive(True)
+
+        self._dialog.get_window ().set_cursor (None)
         return False        
 
     def _progress_bar_update(self, thread):
