@@ -96,6 +96,8 @@ class DialogBox (object):
         self._dialog.set_transient_for (self._totem.get_main_window ())
         self._apply_button.connect ('clicked', self.__on_apply_clicked)
         self._find_button.connect ('clicked', self.__on_find_clicked)
+        self._tree_view.connect ('row-activated', 
+                                 self.__on_treeview__row_activate)
 
         # connect callbacks
         self._tree_view.get_selection ().connect ('changed',
@@ -261,6 +263,16 @@ class DialogBox (object):
             self._apply_button.set_sensitive (True)
         else:
             self._apply_button.set_sensitive (False)
+
+    def __on_treeview__row_activate(self, tree_path, column, data):
+        """
+        
+        Arguments:
+        - `tree_path`:
+        - `column`:
+        - `data`:
+        """
+        self._download_and_apply ()
 
     def __on_combobox__changed (self, combobox):
         self._list_store.clear()
