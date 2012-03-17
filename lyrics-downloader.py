@@ -2,7 +2,7 @@
 
 from gi.repository import GObject, Peas, GdkPixbuf, Gtk, Notify # pylint: disable-msg=E0611
 
-from sidebar import LyricsSidebar
+from view.sidebar import LyricsSidebar
 
 class LyricsPlugin (GObject.Object, Peas.Activatable):
     __gtype_name__ = 'LyricsPlugin'

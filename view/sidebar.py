@@ -3,7 +3,7 @@
 from gi.repository import GObject, Peas, GdkPixbuf, Gtk, Notify # pylint: disable-msg=E0611
 from gi.repository import Totem, Gio # pylint: disable-msg=E0611
 
-from dialog_box import DialogBox
+from view.dialog_box import DialogBox
 
 class LyricsSidebar(object):
     
@@ -14,7 +14,7 @@ class LyricsSidebar(object):
 
         # Add sidebar GUI
         builder = Totem.plugin_load_interface ("lyrics-downloader",   #
-                                               "sidebar.ui", 
+                                               "ui/sidebar.ui", 
                                                True,
                                                self._totem.get_main_window (),
                                                self)

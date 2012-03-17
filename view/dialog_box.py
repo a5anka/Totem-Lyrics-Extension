@@ -4,10 +4,13 @@ from gi.repository import GObject, Gtk, Gdk # pylint: disable-msg=E0611
 from gi.repository import Totem # pylint: disable-msg=E0611
 
 from tag_identifier import identify_mp3
-from chart_lyrics_model import ChartLyricsModel
-from lyrdb_model import LyrdbModel
-from search_thread import SearchThread
-from download_thread import DownloadThread
+
+from model.chart_lyrics_model import ChartLyricsModel
+from model.lyrdb_model import LyrdbModel
+
+from workers.search_thread import SearchThread
+from workers.download_thread import DownloadThread
+
 
 class DialogBox (object):
 
@@ -45,7 +48,7 @@ class DialogBox (object):
 
         """
         builder = Totem.plugin_load_interface ("lyrics-downloader",
-                                               "lyrics-downloader.ui", True,
+                                               "ui/lyrics-downloader.ui", True,
                                                self._totem.get_main_window (),
                                                self)
         self._dialog = builder.get_object ('lyrics_dialog')
