@@ -1,7 +1,7 @@
 import urllib2
 import threading
 
-SEARCH_URL = 'http://www.lyrdb.com/lookup.php?q=%s&for=trackname&agent=totem-plugin'
+SEARCH_URL = 'http://www.lyrdb.com/lookup.php?q=%s|%s&for=match&agent=totem-plugin'
 DOWNLOAD_URL =  'http://www.lyrdb.com/getlyr.php?q=%s'
 
 class LyrdbModel(object):
@@ -20,7 +20,8 @@ class LyrdbModel(object):
         self._lock.acquire (True)
         message = ''
         try:
-            url = SEARCH_URL % (urllib2.quote(track))
+            url = SEARCH_URL % (urllib2.quote(artist), urllib2.quote(track))
+            print url
             request = urllib2.urlopen(url)
             response = request.read()
         except:
