@@ -9,10 +9,12 @@ class TestChartLyricsModel (unittest.TestCase):
         
     def test_search_lyrics(self):
         time.sleep(20)
-        result, message = self._model.search_lyrics("Michael Jackson", "bad")
-        self.assertIsInstance(result,list)
-        self.assertIsInstance(result[0],dict)
-        self.assertEqual(result[0]['Artist'], "Michael Jackson")
+        self.result, self.message = self._model.search_lyrics(
+            "Michael Jackson", "bad")
+        self.assertIsInstance(self.result,list)
+        self.assertIsInstance(self.result[0],dict)
+        self.assertEqual(self.result[0]['Artist'], "Michael Jackson")        
+
 
     def test_download_lyrics(self):
         result,message = self._model.download_lyrics('1710',

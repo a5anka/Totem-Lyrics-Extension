@@ -21,12 +21,11 @@ class LyrdbModel(object):
         message = ''
         try:
             url = SEARCH_URL % (urllib2.quote(artist), urllib2.quote(track))
-            print url
             request = urllib2.urlopen(url)
             response = request.read()
         except:
             self._lock.release ()
-            return (None, "Could not contact the server.")
+            return (None, "Could not contact the server. Try again...")
         
         result_array = []
 
